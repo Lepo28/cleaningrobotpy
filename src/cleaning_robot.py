@@ -66,6 +66,7 @@ class CleaningRobot:
 
     def initialize_robot(self) -> None:
         self.pos_x = 0
+        self.pos_y = 0
 
     def robot_status(self) -> str:
         # To be implemented
