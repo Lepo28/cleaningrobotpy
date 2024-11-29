@@ -91,8 +91,11 @@ class TestCleaningRobot(TestCase):
 
         self.assertFalse(system.cleaning_system_on)
 
+    @patch.object(IBS, 'get_charge_left')
     @patch.object(CleaningRobot, 'activate_wheel_motor')
-    def test_execute_command_move_forward(self, mock_wheel_motor: Mock):
+    def test_execute_command_move_forward(self, mock_wheel_motor: Mock, mock_ibs: Mock):
+        mock_ibs.return_value = 100
+
         system = CleaningRobot()
 
         system.pos_x = 0
@@ -105,8 +108,10 @@ class TestCleaningRobot(TestCase):
 
         self.assertEqual(new_status, '(0,1,N)')
 
+    @patch.object(IBS, 'get_charge_left')
     @patch.object(CleaningRobot, 'activate_rotation_motor')
-    def test_execute_command_move_right(self, mock_rotation_motor: Mock):
+    def test_execute_command_move_right(self, mock_rotation_motor: Mock, mock_ibs: Mock):
+        mock_ibs.return_value = 100
         system = CleaningRobot()
 
         system.pos_x = 0
@@ -119,8 +124,10 @@ class TestCleaningRobot(TestCase):
 
         self.assertEqual(new_status, '(0,0,E)')
 
+    @patch.object(IBS, 'get_charge_left')
     @patch.object(CleaningRobot, 'activate_rotation_motor')
-    def test_execute_command_move_left(self, mock_rotation_motor: Mock):
+    def test_execute_command_move_left(self, mock_rotation_motor: Mock, mock_ibs: Mock):
+        mock_ibs.return_value = 100
         system = CleaningRobot()
 
         system.pos_x = 0
@@ -133,7 +140,9 @@ class TestCleaningRobot(TestCase):
 
         self.assertEqual(new_status, '(0,0,W)')
 
-    def test_execute_command_invalid_command(self):
+    @patch.object(IBS, 'get_charge_left')
+    def test_execute_command_invalid_command(self, mock_ibs: Mock):
+        mock_ibs.return_value = 100
         system = CleaningRobot()
 
         system.pos_x = 0
@@ -154,9 +163,12 @@ class TestCleaningRobot(TestCase):
         mock_infrared.return_value = False
         self.assertFalse(system.obstacle_found())
 
+    @patch.object(IBS, 'get_charge_left')
     @patch.object(CleaningRobot, 'activate_wheel_motor')
     @patch.object(GPIO, 'input')
-    def test_execute_command_move_obstacle_detected(self, mock_infrared: Mock, mock_wheel_motor: Mock):
+    def test_execute_command_move_obstacle_detected(self, mock_infrared: Mock, mock_wheel_motor: Mock, mock_ibs: Mock):
+        mock_ibs.return_value = 100
+
         system = CleaningRobot()
         mock_infrared.return_value = True
 
