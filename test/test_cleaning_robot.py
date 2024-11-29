@@ -3,7 +3,7 @@ from unittest.mock import Mock, patch, call
 
 from mock import GPIO
 from mock.ibs import IBS
-from src.cleaning_robot import CleaningRobot
+from src.cleaning_robot import CleaningRobot, CleaningRobotError
 
 
 class TestCleaningRobot(TestCase):
@@ -132,3 +132,12 @@ class TestCleaningRobot(TestCase):
         mock_rotation_motor.assert_called_with(system.LEFT)
 
         self.assertEqual(new_status, '(0,0,W)')
+
+    def test_execute_command_invalid_command(self):
+        system = CleaningRobot()
+
+        system.pos_x = 0
+        system.pos_y = 0
+        system.heading = system.N
+
+        self.assertRaises(CleaningRobotError, system.execute_command, 'a')
