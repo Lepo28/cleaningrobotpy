@@ -65,8 +65,7 @@ class CleaningRobot:
         self.cleaning_system_on = False
 
     def initialize_robot(self) -> None:
-        # To be implemented
-        pass
+        self.pos_x = 0
 
     def robot_status(self) -> str:
         # To be implemented
