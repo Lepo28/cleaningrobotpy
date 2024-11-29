@@ -90,3 +90,17 @@ class TestCleaningRobot(TestCase):
         mock_gpio.assert_has_calls(calls, any_order=True)
 
         self.assertFalse(system.cleaning_system_on)
+
+    @patch.object(CleaningRobot, 'activate_wheel_motor')
+    def test_execute_command_move_forward(self, mock_wheel_motor: Mock):
+        system = CleaningRobot()
+
+        system.pos_x = 0
+        system.pos_y = 0
+        system.heading = system.N
+
+        new_status = system.execute_command(system.FORWARD)
+
+        mock_wheel_motor.assert_called()
+
+        self.assertEqual(new_status, '(0,1,N)')
