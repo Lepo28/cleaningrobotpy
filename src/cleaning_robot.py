@@ -96,6 +96,8 @@ class CleaningRobot:
                 self.heading ='E'
             elif self.heading == 'E':
                 self.heading ='N'
+        else:
+            raise CleaningRobotError
 
         return self.robot_status()
 
