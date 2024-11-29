@@ -154,8 +154,9 @@ class TestCleaningRobot(TestCase):
         mock_infrared.return_value = False
         self.assertFalse(system.obstacle_found())
 
+    @patch.object(CleaningRobot, 'activate_wheel_motor')
     @patch.object(GPIO, 'input')
-    def test_execute_command_move_forward_obstacle_detected(self, mock_infrared: Mock):
+    def test_execute_command_move_obstacle_detected(self, mock_infrared: Mock, mock_wheel_motor: Mock):
         system = CleaningRobot()
         mock_infrared.return_value = True
 
@@ -164,5 +165,7 @@ class TestCleaningRobot(TestCase):
         system.heading = system.N
 
         new_status = system.execute_command(system.FORWARD)
+
+        mock_wheel_motor.assert_not_called()
 
         self.assertEqual(new_status, '(0,0,N)(0,1)')
