@@ -70,7 +70,7 @@ class TestCleaningRobot(TestCase):
         system = CleaningRobot()
         system.manage_cleaning_system()
 
-        calls = [call(system.CLEANING_SYSTEM_PIN, True), call(system.RECHARGE_LED_PIN, False)]
+        calls = [call(system.CLEANING_SYSTEM_PIN, False), call(system.RECHARGE_LED_PIN, True)]
 
         mock_gpio.assert_has_calls(calls, any_order=True)
 
