@@ -86,6 +86,16 @@ class CleaningRobot:
                 self.heading ='W'
             elif self.heading == 'W':
                 self.heading ='N'
+        elif command == self.LEFT:
+            self.activate_rotation_motor(self.LEFT)
+            if self.heading == 'N':
+                self.heading ='W'
+            elif self.heading == 'W':
+                self.heading ='S'
+            elif self.heading == 'S':
+                self.heading ='E'
+            elif self.heading == 'E':
+                self.heading ='N'
 
         return self.robot_status()
 
