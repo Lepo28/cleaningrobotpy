@@ -118,3 +118,17 @@ class TestCleaningRobot(TestCase):
         mock_rotation_motor.assert_called_with(system.RIGHT)
 
         self.assertEqual(new_status, '(0,0,E)')
+
+    @patch.object(CleaningRobot, 'activate_rotation_motor')
+    def test_execute_command_move_left(self, mock_rotation_motor: Mock):
+        system = CleaningRobot()
+
+        system.pos_x = 0
+        system.pos_y = 0
+        system.heading = system.N
+
+        new_status = system.execute_command(system.LEFT)
+
+        mock_rotation_motor.assert_called_with(system.LEFT)
+
+        self.assertEqual(new_status, '(0,0,W)')
