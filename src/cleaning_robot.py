@@ -74,40 +74,48 @@ class CleaningRobot:
 
     def execute_command(self, command: str) -> str:
 
-        obstacle_found = self.obstacle_found()
+        battery_left = self.ibs.get_charge_left()
 
-        if obstacle_found:
-            obstacle_x = self.pos_x - 1 if self.heading == self.W else self.pos_x + 1 if self.heading == self.E else self.pos_x
-            obstacle_y = self.pos_y + 1 if self.heading == self.N else self.pos_y - 1 if self.heading == self.S else self.pos_y
-            return self.robot_status() + f'({obstacle_x},{obstacle_y})'
+        if battery_left > 10:
 
-        if command == self.FORWARD:
-            self.activate_wheel_motor()
-            self.pos_y += 1
-        elif command == self.RIGHT:
-            self.activate_rotation_motor(self.RIGHT)
-            if self.heading == 'N':
-                self.heading ='E'
-            elif self.heading == 'E':
-                self.heading ='S'
-            elif self.heading == 'S':
-                self.heading ='W'
-            elif self.heading == 'W':
-                self.heading ='N'
-        elif command == self.LEFT:
-            self.activate_rotation_motor(self.LEFT)
-            if self.heading == 'N':
-                self.heading ='W'
-            elif self.heading == 'W':
-                self.heading ='S'
-            elif self.heading == 'S':
-                self.heading ='E'
-            elif self.heading == 'E':
-                self.heading ='N'
+            obstacle_found = self.obstacle_found()
+
+            if obstacle_found:
+                obstacle_x = self.pos_x - 1 if self.heading == self.W else self.pos_x + 1 if self.heading == self.E else self.pos_x
+                obstacle_y = self.pos_y + 1 if self.heading == self.N else self.pos_y - 1 if self.heading == self.S else self.pos_y
+                return self.robot_status() + f'({obstacle_x},{obstacle_y})'
+
+            if command == self.FORWARD:
+                self.activate_wheel_motor()
+                self.pos_y += 1
+            elif command == self.RIGHT:
+                self.activate_rotation_motor(self.RIGHT)
+                if self.heading == 'N':
+                    self.heading ='E'
+                elif self.heading == 'E':
+                    self.heading ='S'
+                elif self.heading == 'S':
+                    self.heading ='W'
+                elif self.heading == 'W':
+                    self.heading ='N'
+            elif command == self.LEFT:
+                self.activate_rotation_motor(self.LEFT)
+                if self.heading == 'N':
+                    self.heading ='W'
+                elif self.heading == 'W':
+                    self.heading ='S'
+                elif self.heading == 'S':
+                    self.heading ='E'
+                elif self.heading == 'E':
+                    self.heading ='N'
+            else:
+                raise CleaningRobotError
+
+            return self.robot_status()
+
         else:
-            raise CleaningRobotError
-
-        return self.robot_status()
+            self.manage_cleaning_system()
+            return '!' + self.robot_status()
 
     def obstacle_found(self) -> bool:
         return GPIO.input(self.INFRARED_PIN)
