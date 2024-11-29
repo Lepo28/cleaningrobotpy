@@ -36,7 +36,7 @@ class TestCleaningRobot(TestCase):
 
     @patch.object(IBS, 'get_charge_left')
     @patch.object(GPIO, 'output')
-    def test_manage_cleaning_system_turn_off_recharge_led(self, mock_gpio: Mock, mock_ibs: Mock):
+    def test_manage_cleaning_system_battery_greater_than_10_turn_off_recharge_led(self, mock_gpio: Mock, mock_ibs: Mock):
         mock_ibs.return_value = 11
 
         system = CleaningRobot()
