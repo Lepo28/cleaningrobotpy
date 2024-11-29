@@ -141,3 +141,9 @@ class TestCleaningRobot(TestCase):
         system.heading = system.N
 
         self.assertRaises(CleaningRobotError, system.execute_command, 'a')
+
+    @patch.object(GPIO, 'input')
+    def test_obstacle_found_true(self, mock_infrared: Mock):
+        system = CleaningRobot()
+        mock_infrared.return_value = True
+        self.assertTrue(system.obstacle_found())
