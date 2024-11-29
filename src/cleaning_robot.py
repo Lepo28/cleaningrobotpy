@@ -73,6 +73,15 @@ class CleaningRobot:
         return f"({self.pos_x},{self.pos_y},{self.heading})"
 
     def execute_command(self, command: str) -> str:
+
+        obstacle_found = self.obstacle_found()
+
+        if obstacle_found:
+            if command == self.FORWARD:
+                obstacle_x = self.pos_x - 1 if self.heading == self.W else self.pos_x + 1 if self.heading == self.E else self.pos_x
+                obstacle_y = self.pos_y + 1 if self.heading == self.N else self.pos_y - 1 if self.heading == self.S else self.pos_y
+                return self.robot_status() + f'({obstacle_x},{obstacle_y})'
+
         if command == self.FORWARD:
             self.activate_wheel_motor()
             self.pos_y += 1
