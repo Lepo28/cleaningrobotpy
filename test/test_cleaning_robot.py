@@ -169,3 +169,22 @@ class TestCleaningRobot(TestCase):
         mock_wheel_motor.assert_not_called()
 
         self.assertEqual(new_status, '(0,0,N)(0,1)')
+
+    @patch.object(GPIO, 'output')
+    @patch.object(IBS, 'get_charge_left')
+    def test_execute_command_battery_low(self, mock_ibs: Mock, mock_gpio: Mock):
+        mock_ibs.return_value = 9
+
+        system = CleaningRobot()
+
+        system.pos_x = 1
+        system.pos_y = 1
+        system.heading = system.N
+
+        new_status = system.execute_command(system.FORWARD)
+
+        calls = [call(system.CLEANING_SYSTEM_PIN, False), call(system.RECHARGE_LED_PIN, True)]
+
+        mock_gpio.assert_has_calls(calls, any_order=True)
+
+        self.assertEqual(new_status, '!(1,1,N)')
