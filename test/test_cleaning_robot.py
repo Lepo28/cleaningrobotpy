@@ -12,3 +12,8 @@ class TestCleaningRobot(TestCase):
         system = CleaningRobot()
         system.initialize_robot()
         self.assertEqual(system.pos_x, 0)
+
+    def test_initialize_robot_set_y_to_zero(self):
+        system = CleaningRobot()
+        system.initialize_robot()
+        self.assertEqual(system.pos_y, 0)
