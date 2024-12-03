@@ -38,6 +38,7 @@ class CleaningRobot:
     LEFT = 'l'
     RIGHT = 'r'
     FORWARD = 'f'
+    BACKWARD = 'b'
 
     def __init__(self):
         GPIO.setmode(GPIO.BOARD)
@@ -115,6 +116,16 @@ class CleaningRobot:
                     self.heading = self.E
                 elif self.heading == self.E:
                     self.heading = self.N
+            elif command == self.BACKWARD:
+                self.activate_wheel_motor()
+                if self.heading == self.N:
+                    self.pos_y -= 1
+                elif self.heading == self.S:
+                    self.pos_y += 1
+                elif self.heading == self.E:
+                    self.pos_x -= 1
+                elif self.heading == self.W:
+                    self.pos_x += 1
             else:
                 raise CleaningRobotError
 
