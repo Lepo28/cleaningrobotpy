@@ -200,3 +200,20 @@ class TestCleaningRobot(TestCase):
         mock_gpio.assert_has_calls(calls, any_order=True)
 
         self.assertEqual(new_status, '!(1,1,N)')
+
+    @patch.object(IBS, 'get_charge_left')
+    @patch.object(CleaningRobot, 'activate_wheel_motor')
+    def test_execute_command_move_backward(self, mock_wheel_motor: Mock, mock_ibs: Mock):
+        mock_ibs.return_value = 100
+
+        system = CleaningRobot()
+
+        system.pos_x = 1
+        system.pos_y = 1
+        system.heading = system.N
+
+        new_status = system.execute_command(system.BACKWARD)
+
+        mock_wheel_motor.assert_called()
+
+        self.assertEqual(new_status, '(1,0,N)')
