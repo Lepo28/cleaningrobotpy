@@ -82,8 +82,14 @@ class CleaningRobot:
             obstacle_found = self.obstacle_found()
 
             if obstacle_found:
-                obstacle_x = self.pos_x - 1 if self.heading == self.W else self.pos_x + 1 if self.heading == self.E else self.pos_x
-                obstacle_y = self.pos_y + 1 if self.heading == self.N else self.pos_y - 1 if self.heading == self.S else self.pos_y
+                obstacle_x = None
+                obstacle_y = None
+                if command == self.FORWARD:
+                    obstacle_x = self.pos_x - 1 if self.heading == self.W else self.pos_x + 1 if self.heading == self.E else self.pos_x
+                    obstacle_y = self.pos_y + 1 if self.heading == self.N else self.pos_y - 1 if self.heading == self.S else self.pos_y
+                if command == self.BACKWARD:
+                    obstacle_x = self.pos_x + 1 if self.heading == self.W else self.pos_x - 1 if self.heading == self.E else self.pos_x
+                    obstacle_y = self.pos_y - 1 if self.heading == self.N else self.pos_y + 1 if self.heading == self.S else self.pos_y
                 return self.robot_status() + f'({obstacle_x},{obstacle_y})'
 
             if command == self.FORWARD:
