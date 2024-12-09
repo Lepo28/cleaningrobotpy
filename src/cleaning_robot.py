@@ -73,6 +73,21 @@ class CleaningRobot:
     def robot_status(self) -> str:
         return f"({self.pos_x},{self.pos_y},{self.heading})"
 
+    def calculate_obstacle_position(self, command):
+        if command == self.FORWARD:
+            delta_x = -1 if self.heading == self.W else 1 if self.heading == self.E else 0
+            delta_y = 1 if self.heading == self.N else -1 if self.heading == self.S else 0
+        elif command == self.BACKWARD:
+            delta_x = 1 if self.heading == self.W else -1 if self.heading == self.E else 0
+            delta_y = -1 if self.heading == self.N else 1 if self.heading == self.S else 0
+        else:
+            delta_x = delta_y = 0
+
+        obstacle_x = self.pos_x + delta_x
+        obstacle_y = self.pos_y + delta_y
+
+        return obstacle_x, obstacle_y
+
     def execute_command(self, command: str) -> str:
 
         battery_left = self.ibs.get_charge_left()
@@ -82,14 +97,7 @@ class CleaningRobot:
             obstacle_found = self.obstacle_found()
 
             if obstacle_found:
-                obstacle_x = None
-                obstacle_y = None
-                if command == self.FORWARD:
-                    obstacle_x = self.pos_x - 1 if self.heading == self.W else self.pos_x + 1 if self.heading == self.E else self.pos_x
-                    obstacle_y = self.pos_y + 1 if self.heading == self.N else self.pos_y - 1 if self.heading == self.S else self.pos_y
-                if command == self.BACKWARD:
-                    obstacle_x = self.pos_x + 1 if self.heading == self.W else self.pos_x - 1 if self.heading == self.E else self.pos_x
-                    obstacle_y = self.pos_y - 1 if self.heading == self.N else self.pos_y + 1 if self.heading == self.S else self.pos_y
+                obstacle_x, obstacle_y = self.calculate_obstacle_position(command)
                 return self.robot_status() + f'({obstacle_x},{obstacle_y})'
 
             if command == self.FORWARD:
